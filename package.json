@@ -1,6 +1,13 @@
 {
+  "scripts": {
+    "build": "tsc",
+    "build-watch": "tsc --watch"
+  },
   "engines": {
     "node": "12.16.1",
     "npm": "6.14.5"
+  },
+  "devDependencies": {
+    "typescript": "3.9.5"
   }
 }

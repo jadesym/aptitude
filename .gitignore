@@ -1,1 +1,5 @@
+# External Dependencies to be installed
 node_modules
+
+# Typescript generated/built files
+dist
