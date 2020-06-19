@@ -1,13 +1,18 @@
 {
   "scripts": {
     "build": "tsc",
-    "build-watch": "tsc --watch"
+    "build-watch": "tsc --watch",
+    "lint": "eslint src/ --ext .ts,.tsx"
   },
   "engines": {
     "node": "12.16.1",
     "npm": "6.14.5"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "3.3.0",
+    "@typescript-eslint/parser": "3.3.0",
+    "eslint": "7.2.0",
+    "eslint-plugin-react": "7.20.0",
     "typescript": "3.9.5"
   }
 }
