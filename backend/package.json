@@ -2,7 +2,8 @@
   "scripts": {
     "build": "tsc",
     "build-watch": "tsc --watch",
-    "lint": "eslint src/ --ext .ts,.tsx"
+    "lint": "eslint src/ --ext .ts,.tsx",
+    "start": "node dist/main.js"
   },
   "engines": {
     "node": "12.16.1",
