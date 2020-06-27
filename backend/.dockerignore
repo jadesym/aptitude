@@ -1,0 +1,13 @@
+# Ignore git specific files
+.gitignore
+.git
+.githooks
+
+# Ignore built dependencies
+node_modules
+
+# Ignore built source code
+dist
+
+# Ignore any lint configuration files
+.eslintrc.js
