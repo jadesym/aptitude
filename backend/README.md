@@ -11,3 +11,6 @@ docker-compose up --detach
 docker-compose up aptitude-backend 
 # 2) Shutdown services when finished
 docker-compose stop
+
+# s6-overlay init daemon docs
+[s6-overlay documentation](https://github.com/just-containers/s6-overlay)
