@@ -1,5 +1,5 @@
-import express from "express";
-import initializeRoutes from "./routes/routes";
+import express from 'express';
+import initializeRoutes from './routes/routes';
 
 const app = express();
 
@@ -15,4 +15,4 @@ function greeter(person_name: string) {
   return `Hello, ${person_name}`;
 }
 
-console.log(greeter("Bob"));
+console.log(greeter('Bob'));
