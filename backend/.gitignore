@@ -3,3 +3,6 @@ node_modules
 
 # Ignore built source code
 dist
+
+# Ignore code coverage directories
+coverage
