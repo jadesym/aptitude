@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  e2e-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: test
+    # depends_on:
+    #   - app

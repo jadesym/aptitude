@@ -4,7 +4,7 @@
 
 # Set the base image to jadesym/node-ubuntu-docker-base
 # https://hub.docker.com/repository/docker/jadesym/node-ubuntu-docker-base
-FROM jadesym/node-ubuntu-docker-base:latest
+FROM jadesym/node-ubuntu-docker-base:latest as base
 
 #----------------------------------------------------------------------
 # Dependencies Installation
@@ -26,7 +26,7 @@ RUN apt-get install -qq -y \
 #----------------------------------------------------------------------
 ARG USER_NAME=node
 ARG DATA_DIR=/data/
-ARG APP_DIR=$DATA_DIR/app/
+ENV APP_DIR=$DATA_DIR/app/
 
 RUN mkdir -p $APP_DIR
 
@@ -40,7 +40,7 @@ WORKDIR $APP_DIR
 #----------------------------------------------------------------------
 # Loading & Running the Repository Code
 #----------------------------------------------------------------------
-# 1. Loading the Application Code
+# Copy configuration and dependency files
 COPY \
   # Copy NPM RC file for npm configurations
   .npmrc \
@@ -52,16 +52,41 @@ COPY \
   # To destination directory
   $APP_DIR
 
+# Install dependencies from package lock (clean install)
+RUN npm ci
+
 # Copy source code contents. Directories are treated differently.
 # Copying with multiple source files will copy the contents of the file
 # instead of the directory, which is why this COPY command is separate.
 COPY src $APP_DIR/src
 
-# 2. Install dependencies from package lock (clean install)
-RUN npm ci
+#----------------------------------------------------------------------
+# Use multi-stage builds to build the environment
+#----------------------------------------------------------------------
+FROM base as builder
 
-# 3. Build distribution directory
 RUN npm run build
 
-# 4. Start the server
+#----------------------------------------------------------------------
+# Use multi-stage builds to have the test image
+#----------------------------------------------------------------------
+FROM base as test
+
+# Copying necessary test files
+COPY \
+  jestconfig.json \
+  # To destination directory
+  $APP_DIR
+COPY test $APP_DIR/test
+
+CMD ["npm", "run", "test"]
+
+#----------------------------------------------------------------------
+# Use multi-stage builds to have the test image
+#----------------------------------------------------------------------
+FROM base as app
+
+COPY --from=builder $APP_DIR/dist $APP_DIR/dist
+
+# Start the server
 CMD ["npm", "run", "start"]
