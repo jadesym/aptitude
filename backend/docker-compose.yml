@@ -3,6 +3,7 @@ services:
   aptitude-backend:
     build: .
     ports:
-    - "3000:3000"
+      - '3000:3000'
     environment:
       NODE_ENV: development
+      S6_LOGGING: 1
