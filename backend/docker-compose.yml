@@ -1,9 +1,9 @@
-version: '2.0'
+version: '3.8'
 services:
   aptitude-backend:
     build: .
-    ports:
-      - '3000:3000'
     environment:
       NODE_ENV: development
-      S6_LOGGING: 1
+    init: true
+    ports:
+      - '3000:3000'
