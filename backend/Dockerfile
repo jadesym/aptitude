@@ -25,17 +25,15 @@ RUN apt-get install -qq -y \
 # User & Directory Setup
 #----------------------------------------------------------------------
 ARG USER_NAME=node
-ARG DATA_DIR=/data
-ARG APP_DIR=$DATA_DIR/app
+ARG DATA_DIR=/data/
+ARG APP_DIR=$DATA_DIR/app/
+
+RUN mkdir -p $APP_DIR
 
 RUN useradd -ms /bin/bash $USER_NAME
-
-RUN mkdir $DATA_DIR
 RUN chown -R $USER_NAME:$USER_NAME $DATA_DIR
 
 USER $USER_NAME
-
-RUN mkdir $APP_DIR
 
 WORKDIR $APP_DIR
 
@@ -43,15 +41,21 @@ WORKDIR $APP_DIR
 # Loading & Running the Repository Code
 #----------------------------------------------------------------------
 # 1. Loading the Application Code
-# Copy dependencies definition files [package(-lock).json] as source of truth for dependencies
-COPY package-lock.json $APP_DIR
-COPY package.json $APP_DIR
-# Copy NPM RC file for npm configurations
-COPY .npmrc $APP_DIR
-# Copy source code
+COPY \
+  # Copy NPM RC file for npm configurations
+  .npmrc \
+  # Copy dependencies definition files [package(-lock).json] as source of truth for dependencies
+  package-lock.json \
+  package.json \
+  # Typescript configuration
+  tsconfig.json \
+  # To destination directory
+  $APP_DIR
+
+# Copy source code contents. Directories are treated differently.
+# Copying with multiple source files will copy the contents of the file
+# instead of the directory, which is why this COPY command is separate.
 COPY src $APP_DIR/src
-# Copy typescript configuration
-COPY tsconfig.json $APP_DIR
 
 # 2. Install dependencies from package lock (clean install)
 RUN npm ci
