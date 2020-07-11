@@ -17,7 +17,6 @@ RUN apt-get -qq update \
     && apt-get install -qq -y \
         apt-utils \
         curl \
-        gpg \
         less \
         vim \
     && apt-get -qq -y autoclean
