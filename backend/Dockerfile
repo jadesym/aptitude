@@ -68,6 +68,18 @@ FROM base as builder
 RUN npm run build
 
 #----------------------------------------------------------------------
+# Use multi-stage builds to run the linter
+#----------------------------------------------------------------------
+FROM base as linter
+
+COPY \
+  .eslintrc.js \
+  .prettierrc \
+  $APP_DIR
+
+RUN npm run lint
+
+#----------------------------------------------------------------------
 # Use multi-stage builds to have the test image
 #----------------------------------------------------------------------
 FROM base as test

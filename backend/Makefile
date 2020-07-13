@@ -3,6 +3,7 @@
 PROJECT_NAME = $(notdir $(PWD))
 
 DOCKER_COMPOSE_MAIN_FILE_NAME = docker-compose.yml
+DOCKER_COMPOSE_LINT_FILE_NAME = docker-compose.lint.yml
 DOCKER_COMPOSE_TEST_FILE_NAME = docker-compose.test.yml
 
 .PHONY: build build-test clean e2e-test rebuild rebuild-test
@@ -22,6 +23,9 @@ e2e-test:
 		&& curl localhost:3000/status \
 		&& echo "End-to-end (E2E) tests successfully passed!" \
 		|| docker-compose --file $(DOCKER_COMPOSE_TEST_FILE_NAME) down
+
+lint:
+	docker-compose --file $(DOCKER_COMPOSE_LINT_FILE_NAME) build
 
 rebuild:
 	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) build --no-cache --pull
