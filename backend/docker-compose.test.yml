@@ -5,5 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: test
-    # depends_on:
-    #   - app
+    depends_on:
+      - app
+    links:
+      - app
