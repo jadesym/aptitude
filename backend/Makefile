@@ -18,7 +18,8 @@ clean:
 	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) --file $(DOCKER_COMPOSE_TEST_FILE_NAME) \
 	down --remove-orphans --rmi all
 
-e2e-test:
+e2e-test: deploy
+	# Remove the curl against the localhost PORT after we migrate this to e2e-tests
 	docker-compose --file $(DOCKER_COMPOSE_TEST_FILE_NAME) run e2e-test \
 		&& curl localhost:3000/status \
 		&& echo "End-to-end (E2E) tests successfully passed!" \
@@ -33,5 +34,5 @@ rebuild:
 rebuild-test:
 	docker-compose --file $(DOCKER_COMPOSE_TEST_FILE_NAME) build --no-cache --pull
 
-deploy:
+deploy: build
 	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) up --detach
