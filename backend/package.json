@@ -4,7 +4,6 @@
     "build-watch": "tsc --watch",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint src/ --ext .ts,.tsx",
-    "precommit": "npm-run-all --parallel build lint test",
     "start": "node dist/main.js",
     "test": "jest --config jestconfig.json --silent"
   },

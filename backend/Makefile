@@ -32,7 +32,10 @@ rebuild:
 	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) build --no-cache --pull
 
 rebuild-test:
-	docker-compose --file $(DOCKER_COMPOSE_TEST_FILE_NAME) build --no-cache --pull
+	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) --file $(DOCKER_COMPOSE_TEST_FILE_NAME) build --no-cache --pull
+
+relint:
+	docker-compose --file $(DOCKER_COMPOSE_LINT_FILE_NAME) build --no-cache --pull
 
 deploy: build
 	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) up --detach
