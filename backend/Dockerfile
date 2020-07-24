@@ -77,7 +77,7 @@ COPY \
   .prettierrc \
   $APP_DIR
 
-RUN npm run lint
+CMD ["npm", "run", "lint"]
 
 #----------------------------------------------------------------------
 # Use multi-stage builds to have the test image

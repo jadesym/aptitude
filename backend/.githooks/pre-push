@@ -8,7 +8,7 @@ current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
 
 if [ $protected_branch = $current_branch ]
 	then
-    make rebuild e2e-test
+    make precommit
 else
     exit 0
 fi
