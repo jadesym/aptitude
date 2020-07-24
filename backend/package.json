@@ -5,7 +5,8 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint src/ --ext .ts,.tsx",
     "start": "node dist/main.js",
-    "test": "jest --config jestconfig.json --silent"
+    "test:unit": "jest ./unit --config jestconfig.json --silent",
+    "test:e2e": "jest ./e2e --config jestconfig.json --silent"
   },
   "engines": {
     "node": "12.16.1",

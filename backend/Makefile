@@ -9,7 +9,7 @@ PROJECT_NAME = $(notdir $(PWD))
 ##--------------------------------------------------------------------
 DOCKER_COMPOSE_MAIN_FILE_NAME = docker-compose.yml
 DOCKER_COMPOSE_LINT_FILE_NAME = docker-compose.lint.yml
-DOCKER_COMPOSE_E2E_TEST_FILE_NAME = docker-compose.e2e-test.yml
+DOCKER_COMPOSE_TEST_FILE_NAME = docker-compose.test.yml
 
 .PHONY: build build-test clean deploy e2e-test rebuild rebuild-test
 
@@ -22,29 +22,33 @@ build-all:
 	docker-compose \
 		--file $(DOCKER_COMPOSE_MAIN_FILE_NAME) \
 		--file $(DOCKER_COMPOSE_LINT_FILE_NAME) \
-		--file $(DOCKER_COMPOSE_E2E_TEST_FILE_NAME) \
+		--file $(DOCKER_COMPOSE_TEST_FILE_NAME) \
 		build
 
 ## build-test      | Builds the test docker image
 build-test:
-	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) --file $(DOCKER_COMPOSE_E2E_TEST_FILE_NAME) build
+	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) --file $(DOCKER_COMPOSE_TEST_FILE_NAME) build
 
 ## clean           | Stops all docker containers running
 clean:
-	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) --file $(DOCKER_COMPOSE_E2E_TEST_FILE_NAME) \
+	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) --file $(DOCKER_COMPOSE_TEST_FILE_NAME) \
 	down --remove-orphans --rmi all
 
 ## deploy          | Deploys the main service
 deploy: build
 	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) up --detach
 
-## e2e-test        | Runs the end to end tests
-e2e-test: build-test
+## test-e2e        | Runs the end to end tests
+test-e2e: build-test
 	# Remove the curl against the localhost PORT after we migrate this to e2e-tests
-	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) --file $(DOCKER_COMPOSE_E2E_TEST_FILE_NAME) up --detach \
+	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) --file $(DOCKER_COMPOSE_TEST_FILE_NAME) up --detach app test-e2e \
 		&& curl localhost:3000/status \
 		&& echo "End-to-end (E2E) tests successfully passed!" \
-		|| docker-compose --file $(DOCKER_COMPOSE_E2E_TEST_FILE_NAME) down
+		|| docker-compose --file $(DOCKER_COMPOSE_TEST_FILE_NAME) down
+
+## test-unit       | Runs the unit tests
+test-unit: build-test
+	docker-compose --file $(DOCKER_COMPOSE_TEST_FILE_NAME) run test-unit
 
 ## help            | Outputs the possible make commands
 help : Makefile
@@ -55,7 +59,7 @@ lint:
 	docker-compose --file $(DOCKER_COMPOSE_LINT_FILE_NAME) up
 
 ## precommit       | Runs necessary build/tests before committing
-precommit: rebuild-all lint e2e-test
+precommit: rebuild-all lint test-unit test-e2e
 
 ## rebuild         | Builds the main service with no caching and pulling in the latest images
 rebuild:
@@ -67,9 +71,9 @@ rebuild-all:
 	docker-compose \
 		--file $(DOCKER_COMPOSE_MAIN_FILE_NAME) \
 		--file $(DOCKER_COMPOSE_LINT_FILE_NAME) \
-		--file $(DOCKER_COMPOSE_E2E_TEST_FILE_NAME) \
+		--file $(DOCKER_COMPOSE_TEST_FILE_NAME) \
 		build --no-cache --pull
 
 ## rebuild-test    | Builds the test image with no caching and pulling in the latest image
 rebuild-test:
-	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) --file $(DOCKER_COMPOSE_E2E_TEST_FILE_NAME) build --no-cache --pull
+	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) --file $(DOCKER_COMPOSE_TEST_FILE_NAME) build --no-cache --pull

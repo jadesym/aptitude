@@ -80,18 +80,32 @@ COPY \
 CMD ["npm", "run", "lint"]
 
 #----------------------------------------------------------------------
-# Use multi-stage builds to have the test image
+# Use multi-stage builds to have the e2e test image
 #----------------------------------------------------------------------
-FROM base as test
+FROM base as test-e2e
 
-# Copying necessary test files
+# Copying necessary e2e test files
 COPY \
   jestconfig.json \
   # To destination directory
   $APP_DIR
-COPY test $APP_DIR/test
+COPY test/e2e $APP_DIR/test/e2e
 
-CMD ["npm", "run", "test"]
+CMD ["npm", "run", "test:e2e"]
+
+#----------------------------------------------------------------------
+# Use multi-stage builds to have the unit test image
+#----------------------------------------------------------------------
+FROM base as test-unit
+
+# Copying necessary unit test files
+COPY \
+  jestconfig.json \
+  # To destination directory
+  $APP_DIR
+COPY test/unit $APP_DIR/test/unit
+
+CMD ["npm", "run", "test:unit"]
 
 #----------------------------------------------------------------------
 # Use multi-stage builds to have the test image
