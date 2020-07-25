@@ -51,7 +51,7 @@ test-unit: build-test
 	docker-compose --file $(DOCKER_COMPOSE_TEST_FILE_NAME) run test-unit
 
 ## help            | Outputs the possible make commands
-help : Makefile
+help: Makefile
 	@sed -n 's/^##//p' $<
 
 ## lint            | Runs the linter
