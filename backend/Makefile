@@ -41,10 +41,13 @@ deploy: build
 ## test-e2e        | Runs the end to end tests
 test-e2e: build-test
 	# Remove the curl against the localhost PORT after we migrate this to e2e-tests
-	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) --file $(DOCKER_COMPOSE_TEST_FILE_NAME) up --detach app test-e2e \
-		&& curl localhost:3000/status \
-		&& echo "End-to-end (E2E) tests successfully passed!" \
-		|| docker-compose --file $(DOCKER_COMPOSE_TEST_FILE_NAME) down
+	if docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) --file $(DOCKER_COMPOSE_TEST_FILE_NAME) up --detach app test-e2e ; then \
+		curl localhost:3000/status; \
+		echo "End-to-end (E2E) tests successfully passed!"; \
+	else \
+		echo "End-to-end (E2E) tests failed!"; \
+	fi
+	docker-compose --file $(DOCKER_COMPOSE_TEST_FILE_NAME) down
 
 ## test-unit       | Runs the unit tests
 test-unit: build-test
