@@ -8,8 +8,8 @@ current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
 
 if [ $protected_branch = $current_branch ]
 	then
-    (cd backend ; ./.githooks/pre-push)
-		(cd frontend ; ./.githooks/pre-push)
+    (cd backend; ./.githooks/pre-push)
+		(cd frontend; ./.githooks/pre-push)
 else
     exit 0
 fi
