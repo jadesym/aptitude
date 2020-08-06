@@ -62,7 +62,7 @@ lint:
 	docker-compose --file $(DOCKER_COMPOSE_LINT_FILE_NAME) up
 
 ## precommit       | Runs necessary build/tests before committing
-precommit: rebuild-all lint test-unit test-e2e
+precommit: build-all lint test-unit test-e2e
 
 ## rebuild         | Builds the main service with no caching and pulling in the latest images
 rebuild:
