@@ -116,13 +116,14 @@ CMD ["npm", "run", "test:unit"]
 #----------------------------------------------------------------------
 FROM base as app
 
-COPY \
-  .env \
-  $APP_DIR
+## Currently commenting out the copying of the .env file since we don't have custom configs yet.
+# COPY \
+#   .env \
+#   $APP_DIR
 
 COPY \
   --from=builder \
   $APP_DIR/build $APP_DIR/build
 
 # Start the server
-CMD ["npm", "run", "start"]
+CMD ["npx", "serve", "--single", "--no-clipboard", "./build"]
