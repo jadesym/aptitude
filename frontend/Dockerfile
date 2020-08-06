@@ -9,9 +9,8 @@ FROM jadesym/node-ubuntu-docker-base:latest as base
 #----------------------------------------------------------------------
 # Dependencies Installation
 #----------------------------------------------------------------------
-# Confirm Node Installation
-RUN node -v
-RUN npm -v
+# Confirm Node Installation (use for debugging)
+# RUN node -v && npm -v
 
 # Adding non-interactive for debian front-end to hide dialog questions during build.
 # Args only live during the build so they do not persist to the final image.
@@ -28,10 +27,9 @@ ARG USER_NAME=node
 ARG DATA_DIR=/data/
 ENV APP_DIR=$DATA_DIR/app/
 
-RUN mkdir -p $APP_DIR
-
-RUN useradd -ms /bin/bash $USER_NAME
-RUN chown -R $USER_NAME:$USER_NAME $DATA_DIR
+RUN mkdir -p $APP_DIR \
+    && useradd -ms /bin/bash $USER_NAME \
+    && chown -R $USER_NAME:$USER_NAME $DATA_DIR
 
 USER $USER_NAME
 
@@ -110,8 +108,6 @@ COPY \
 COPY \
   --from=builder \
   $APP_DIR/src $APP_DIR/src
-
-RUN ls -alsh
 
 CMD ["npm", "run", "test:unit"]
 
