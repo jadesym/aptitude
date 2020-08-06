@@ -1,5 +1,7 @@
 # External Dependencies to be installed
 backend/node_modules
+frontend/node_modules
 
 # Typescript generated/built files
+frontend/build
 backend/dist
