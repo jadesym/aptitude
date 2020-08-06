@@ -10,7 +10,7 @@ PROJECT_NAME = $(notdir $(PWD))
 DOCKER_COMPOSE_MAIN_FILE_NAME = docker-compose.yml
 DOCKER_COMPOSE_TEST_FILE_NAME = docker-compose.test.yml
 
-.PHONY: build build-test clean deploy help precommit rebuild rebuild-test
+.PHONY: build build-test clean deploy deploy-attach help precommit rebuild rebuild-test
 
 ## build           | Builds the main service
 build:
@@ -29,6 +29,10 @@ clean:
 deploy: build
 	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) up --detach
 
+## deploy-attach   | Deploys the main service without detaching
+deploy-attach: build
+	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) up
+
 # test-unit       | Runs the unit tests
 test-unit: build-test
 	docker-compose --file $(DOCKER_COMPOSE_TEST_FILE_NAME) run test-unit
@@ -38,7 +42,7 @@ help: Makefile
 	@sed -n 's/^##//p' $<
 
 ## precommit       | Runs necessary build/tests before committing
-precommit: rebuild rebuild-test test-unit
+precommit: build build-test test-unit
 
 ## rebuild         | Builds the main service with no caching and pulling in the latest images
 rebuild:
