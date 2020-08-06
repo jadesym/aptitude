@@ -31,7 +31,7 @@ build-test:
 
 ## clean           | Stops all docker containers running
 clean:
-	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) --file $(DOCKER_COMPOSE_TEST_FILE_NAME) \
+	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) --file $(DOCKER_COMPOSE_LINT_FILE_NAME) --file $(DOCKER_COMPOSE_TEST_FILE_NAME) \
 	down --remove-orphans --rmi all
 
 ## deploy          | Deploys the main service
@@ -47,7 +47,7 @@ test-e2e: build-test
 	else \
 		echo "End-to-end (E2E) tests failed!"; \
 	fi
-	docker-compose --file $(DOCKER_COMPOSE_TEST_FILE_NAME) down
+	docker-compose --file $(DOCKER_COMPOSE_MAIN_FILE_NAME) --file $(DOCKER_COMPOSE_TEST_FILE_NAME) down
 
 ## test-unit       | Runs the unit tests
 test-unit: build-test
@@ -60,6 +60,7 @@ help: Makefile
 ## lint            | Runs the linter
 lint:
 	docker-compose --file $(DOCKER_COMPOSE_LINT_FILE_NAME) up
+	docker-compose --file $(DOCKER_COMPOSE_LINT_FILE_NAME) down
 
 ## precommit       | Runs necessary build/tests before committing
 precommit: build-all lint test-unit test-e2e
