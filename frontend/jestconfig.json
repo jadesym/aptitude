@@ -1,9 +1,0 @@
-{
-  "collectCoverage": true,
-  "collectCoverageFrom": ["src/**/*.{ts,tsx}"],
-  "transform": {
-    "^.+\\.(t|j)sx?$": "ts-jest"
-  },
-  "testRegex": "(/**/.*\\.test.ts(x)?)$",
-  "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
-}
