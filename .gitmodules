@@ -1,0 +1,6 @@
+[submodule "aptitude-frontend"]
+	path = aptitude-frontend
+	url = git@github.com:jadesym/aptitude-frontend.git
+[submodule "aptitude-backend"]
+	path = aptitude-backend
+	url = git@github.com:jadesym/aptitude-backend.git
